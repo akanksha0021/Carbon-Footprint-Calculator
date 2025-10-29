@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider">
+                <div class="slider-icons">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </div>
+            </div>
+        </label>
+    </div>
+
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <div class="container">
+        <header class="text-center my-5 fade-in">
+            <h1 class="display-4">Carbon Footprint Calculator</h1>
+            <p class="lead">Calculate your carbon footprint and get personalized recommendations to reduce your environmental impact</p>
+        </header>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-4 slide-in">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h5 mb-0"><i class="fas fa-edit me-2"></i>Input Your Data</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="calculator-form">
+                            <div class="mb-3">
+                                <label for="electricity" class="form-label">Electricity Consumption</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-bolt"></i></span>
+                                    <select class="form-select" id="electricity" name="electricity" required>
+                                        <option value="high">High (> 400 kWh/month)</option>
+                                        <option value="moderate" selected>Moderate (200-400 kWh/month)</option>
+                                        <option value="low">Low (< 200 kWh/month)</option>
+                                    </select>
+                                </div>
+                                <div class="form-text">Select your typical monthly electricity usage level</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="transport" class="form-label">Transportation Usage</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-car"></i></span>
+                                    <select class="form-select" id="transport" name="transport" required>
+                                        <option value="high">High (> 300 km/week)</option>
+                                        <option value="moderate" selected>Moderate (100-300 km/week)</option>
+                                        <option value="low">Low (< 100 km/week)</option>
+                                    </select>
+                                </div>
+                                <div class="form-text">Select your weekly car/vehicle travel distance</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="meat" class="form-label">Meat Consumption</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-drumstick-bite"></i></span>
+                                    <select class="form-select" id="meat" name="meat" required>
+                                        <option value="high">High (> 2 kg/week)</option>
+                                        <option value="moderate" selected>Moderate (0.5-2 kg/week)</option>
+                                        <option value="low">Low (< 0.5 kg/week or vegetarian)</option>
+                                    </select>
+                                </div>
+                                <div class="form-text">Select your weekly meat consumption level</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="waste" class="form-label">Non-Recycled Waste</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-trash"></i></span>
+                                    <select class="form-select" id="waste" name="waste" required>
+                                        <option value="high">High (> 10 kg/week)</option>
+                                        <option value="moderate" selected>Moderate (3-10 kg/week)</option>
+                                        <option value="low">Low (< 3 kg/week)</option>
+                                    </select>
+                                </div>
+                                <div class="form-text">Select your weekly non-recycled waste amount</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="water" class="form-label">Water Usage</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-tint"></i></span>
+                                    <select class="form-select" id="water" name="water" required>
+                                        <option value="high">High (> 200 liters/day)</option>
+                                        <option value="moderate" selected>Moderate (100-200 liters/day)</option>
+                                        <option value="low">Low (< 100 liters/day)</option>
+                                    </select>
+                                </div>
+                                <div class="form-text">Select your daily water consumption level</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="region" class="form-label">Your Region</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                                    <select class="form-select" id="region" name="region">
+                                        <option value="">Global (No specific region)</option>
+                                        <!-- Regions will be populated via JavaScript -->
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-calculator me-2"></i>Calculate My Footprint
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div id="results" class="d-none">
+                    <div class="card shadow-sm mb-4 slide-in">
+                        <div class="card-header bg-success text-white">
+                            <h2 class="h5 mb-0"><i class="fas fa-chart-pie me-2"></i>Your Carbon Footprint Results</h2>
+                        </div>
+                        <div class="card-body">
+                            <div id="total-footprint" class="text-center mb-4">
+                                <h3 class="h2 mb-3">Total: <span id="total-value">0</span> tons CO2/year</h3>
+                                <div class="progress mb-2">
+                                    <div id="total-progress" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                </div>
+                                <p>Global average: <span id="global-average">0</span> tons CO2/year</p>
+                                <p id="total-comparison"></p>
+                                <p id="regional-comparison" class="text-muted"></p>
+                            </div>
+                            
+                            <h4><i class="fas fa-list-ul me-2"></i>Breakdown by Category</h4>
+                            <div id="category-breakdown"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="recommendations-card" class="card shadow-sm mb-4 d-none slide-in">
+                        <div class="card-header bg-warning text-dark">
+                            <h2 class="h5 mb-0"><i class="fas fa-lightbulb me-2"></i>Personalized Recommendations</h2>
+                        </div>
+                        <div class="card-body">
+                            <p>Based on your inputs, here are some ways to reduce your carbon footprint:</p>
+                            <div id="recommendations"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="good-job-card" class="card shadow-sm mb-4 d-none slide-in">
+                        <div class="card-header bg-info text-white">
+                            <h2 class="h5 mb-0"><i class="fas fa-award me-2"></i>Great Job!</h2>
+                        </div>
+                        <div class="card-body">
+                            <p>Your carbon footprint is below or at global averages. Keep up the good work!</p>
+                            <p>Consider these additional steps:</p>
+                            <ol>
+                                <li>Continue to monitor your consumption patterns</li>
+                                <li>Advocate for climate-friendly policies in your community</li>
+                                <li>Share your sustainable practices with friends and family</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="loading" class="text-center d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Calculating your carbon footprint...</p>
+                </div>
+                
+                <div id="error-message" class="alert alert-danger d-none">
+                    <i class="fas fa-exclamation-triangle me-2"></i>An error occurred while calculating your carbon footprint. Please try again.
+                </div>
+                
+                <div id="initial-message" class="card shadow-sm pulse">
+                    <div class="card-body text-center">
+                        <h3><i class="fas fa-leaf text-success me-2"></i>Ready to Calculate Your Impact?</h3>
+                        <p>Fill out the form on the left and click "Calculate My Footprint" to see your results.</p>
+                        <p class="text-muted small">Learn how your daily choices affect the environment and discover ways to reduce your carbon footprint.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light mt-5 py-3">
+        <div class="container text-center">
+            <p class="text-muted mb-0">Carbon Footprint Calculator | Created for educational purposes</p>
+            <div class="mt-2">
+                <a href="#" class="text-muted me-3"><i class="fab fa-github"></i></a>
+                <a href="#" class="text-muted me-3"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-muted"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html> 
